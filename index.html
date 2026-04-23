@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>MecaFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0d0f;
+  --s1: #141518;
+  --s2: #1c1d22;
+  --s3: #242529;
+  --border: #2a2b30;
+  --accent: #00d4aa;
+  --accent2: #0099ff;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --text: #ecedf0;
+  --muted: #7a7d8a;
+  --verified: #00d4aa;
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+::-webkit-scrollbar { width: 0; height: 0; }
+.header {
+  background: rgba(12,13,15,0.95);
+  backdrop-filter: blur(20px);
+  padding: 16px 18px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.logo-icon {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.logo-text { color: var(--text); }
+.logo-text span { color: var(--accent); }
+.lang-btn {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: 'Barlow', sans-serif;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+.search-wrap { position: relative; margin-bottom: 12px; }
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--s2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  gap: 10px;
+  transition: border-color 0.2s;
+}
+.search-bar:focus-within { border-color: var(--accent); }
+.search-bar input {
+  background: none; border: none; outline: none;
+  color: var(--text); font-family: 'Barlow', sans-serif;
+  font-size: 14px; flex: 1;
+}
+.search-bar input::placeholder { color: var(--muted); }
+.si { color: var(--muted); font-size: 15px; }
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin: 0 -18px;
+  padding: 0 18px;
+  overflow-x: auto;
+}
+.tab {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 10px 14px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.content { padding: 12px 18px 100px; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 18px 0 10px;
+}
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.see-all { font-size: 12px; color: var(--accent); cursor: pointer; font-weight: 600; }
+.cat-scroll {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 4px;
+}
+.cat-pill {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; min-width: 64px;
+  background: var(--s1);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.cat-pill:hover, .cat-pill.active {
+  border-color: var(--accent);
+  background: rgba(0,212,170,0.08);
+}
+.cat-pill .cat-icon { font-size: 22px; }
+.cat-pill .cat-name {
+  font-size: 10px; font-weight: 600;
+  color: var(--muted); text-align: center;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.cat-pill.active .cat-name { color: var(--accent); }
+.brand-scroll {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 4px;
+}
+.brand-chip {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; flex-shrink: 0; cursor: pointer;
+  transition: transform 0.2s;
+}
+.brand-chip:hover { transform: translateY(-2px); }
+.brand-logo {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  border: 1.5px solid var(--border);
+  letter-spacing: -0.5px;
+  transition: border-color 0.2s;
+}
+.brand-chip:hover .brand-logo { border-color: var(--accent); }
+.brand-name {
+  font-size: 9px; font-weight: 600;
+  color: var(--muted); text-align: center;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.video-card {
+  background: var(--s1);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+.video-card:active { transform: scale(0.98); }
+.vthumb {
+  width: 100%; height: 175px;
+  background: var(--s3);
+  position: relative; overflow: hidden;
+}
+.vthumb-bg {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px;
+  opacity: 0.15;
+}
+.vthumb-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.play-btn {
+  width: 46px; height: 46px;
+  background: rgba(0,212,170,0.9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; padding-left: 3px;
+  box-shadow: 0 0 24px rgba(0,212,170,0.4);
+  transition: transform 0.2s;
+}
+.video-card:hover .play-btn { transform: scale(1.1); }
+.vduration {
+  position: absolute; bottom: 8px; right: 8px;
+  background: rgba(0,0,0,0.8); color: #fff;
+  font-size: 11px; padding: 3px 7px;
+  border-radius: 6px; font-weight: 600;
+}
+.vbadge {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px;
+  display: flex; align-items: center; gap: 3px;
+}
+.vbadge.verified { background: rgba(0,212,170,0.2); color: var(--verified); border: 1px solid rgba(0,212,170,0.4); }
+.vbadge.pending { background: rgba(245,158,11,0.2); color: var(--warn); border: 1px solid rgba(245,158,11,0.4); }
+.vcorner {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 6px; padding: 3px 7px;
+  font-size: 10px; color: var(--muted);
+  font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.vinfo { padding: 12px 14px 14px; }
+.vmake {
+  font-size: 11px; color: var(--accent);
+  font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 6px;
+}
+.vtitle {
+  font-size: 15px; font-weight: 600;
+  line-height: 1.35; margin-bottom: 8px;
+}
+.vmeta {
+  display: flex; align-items: center;
+  justify-content: space-between;
+}
+.vauthor {
+  display: flex; align-items: center;
+  gap: 7px; font-size: 12px; color: var(--muted);
+}
+.avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.vstats {
+  display: flex; gap: 10px;
+  font-size: 12px; color: var(--muted);
+}
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 430px;
+  background: rgba(12,13,15,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around;
+  padding: 8px 0 20px; z-index: 100;
+}
+.nav-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+  cursor: pointer; padding: 4px 14px;
+  border-radius: 10px; transition: all 0.2s;
+  position: relative;
+}
+.nav-icon { font-size: 20px; color: var(--muted); transition: color 0.2s; }
+.nav-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item.active .nav-icon { color: var(--accent); }
+.nav-item.active .nav-label { color: var(--accent); }
+.fab {
+  position: fixed; bottom: 76px;
+  right: calc(50% - 215px + 16px);
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #fff;
+  box-shadow: 0 4px 24px rgba(0,212,170,0.4);
+  cursor: pointer; transition: all 0.2s; z-index: 99;
+}
+.fab:hover { transform: scale(1.06); box-shadow: 0 6px 30px rgba(0,212,170,0.55); }
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85); z-index: 200;
+  align-items: flex-end; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--s1);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 40px;
+  width: 100%; max-width: 430px;
+  max-height: 92vh; overflow-y: auto;
+  animation: slideUp 0.28s cubic-bezier(0.32,0.72,0,1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-handle {
+  width: 36px; height: 4px;
+  background: var(--border); border-radius: 2px;
+  margin: 0 auto 18px;
+}
+.modal-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px; font-weight: 800;
+  letter-spacing: 0.5px; margin-bottom: 3px;
+}
+.modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.notice {
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 12px; color: var(--warn);
+  margin-bottom: 16px; line-height: 1.5;
+}
+.form-group { margin-bottom: 14px; }
+.form-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.6px; margin-bottom: 6px; display: block;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--s2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+.form-textarea { resize: none; height: 80px; }
+.form-select option { background: var(--s2); }
+.form-row { display: flex; gap: 10px; }
+.form-row .form-group { flex: 1; }
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none;
+  border-radius: 12px; padding: 14px;
+  font-size: 15px; font-weight: 700;
+  font-family: 'Barlow', sans-serif;
+  cursor: pointer; transition: all 0.2s;
+  margin-top: 6px; letter-spacing: 0.3px;
+}
+.submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.detail-thumb {
+  width: 100%; height: 200px;
+  background: var(--s3);
+  border-radius: 16px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; margin-bottom: 16px;
+  font-size: 70px; opacity: 0.2;
+}
+.detail-play-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  background: rgba(0,0,0,0.4);
+}
+.yt-open-btn {
+  background: #ff0000; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 11px 22px; font-size: 14px;
+  font-weight: 700; cursor: pointer;
+  font-family: 'Barlow', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+  transition: opacity 0.2s;
+}
+.yt-open-btn:hover { opacity: 0.88; }
+.detail-category-tag {
+  display: inline-block;
+  background: rgba(0,212,170,0.15);
+  color: var(--accent); border: 1px solid rgba(0,212,170,0.3);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.detail-title { font-size: 19px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+.detail-make { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.detail-desc { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
+.tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.tag {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 4px 11px;
+  font-size: 11px; color: var(--muted);
+}
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.detail-author-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+}
+.detail-author {
+  display: flex; align-items: center; gap: 10px;
+}
+.detail-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+}
+.detail-author-name { font-size: 14px; font-weight: 600; }
+.detail-author-sub { font-size: 11px; color: var(--muted); }
+.detail-stats { display: flex; gap: 14px; font-size: 13px; color: var(--muted); }
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.lang-option {
+  background: var(--s2); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 10px;
+}
+.lang-option:hover, .lang-option.active { border-color: var(--accent); background: rgba(0,212,170,0.08); }
+.lang-flag { font-size: 22px; }
+.lang-info .lang-name { font-size: 14px; font-weight: 600; }
+.lang-info .lang-native { font-size: 11px; color: var(--muted); }
+.toast {
+  position: fixed; top: 80px;
+  left: 50%; transform: translateX(-50%) translateY(-16px);
+  background: var(--verified); color: #000;
+  padding: 10px 20px; border-radius: 20px;
+  font-size: 13px; font-weight: 700;
+  z-index: 400; opacity: 0;
+  transition: all 0.28s; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.empty {
+  text-align: center; padding: 48px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 15px; font-weight: 600; }
+.empty-sub { font-size: 13px; margin-top: 6px; }
+.featured-banner {
+  background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,153,255,0.15));
+  border: 1px solid rgba(0,212,170,0.25);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex; gap: 14px; align-items: center;
+  cursor: pointer;
+}
+.feat-icon { font-size: 38px; flex-shrink: 0; }
+.feat-label {
+  font-size: 10px; color: var(--accent);
+  font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 4px;
+}
+.feat-title { font-size: 15px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
+.feat-meta { font-size: 11px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">⚙</div>
+      <div class="logo-text">Meca<span>Flow</span></div>
+    </div>
+    <button class="lang-btn" onclick="openLang()">🌐 FR</button>
+  </div>
+  <div class="search-wrap">
+    <div class="search-bar">
+      <span class="si">🔍</span>
+      <input type="text" id="searchInput" placeholder="Marque, modèle, composant, problème..." oninput="applyFilters()">
+    </div>
+  </div>
+  <div class="tabs" id="tabBar">
+    <div class="tab active" onclick="setTab('tous',this)" data-key="tous">Tous</div>
+    <div class="tab" onclick="setTab('auto',this)" data-key="auto">Auto</div>
+    <div class="tab" onclick="setTab('heavy',this)" data-key="heavy">Heavy Duty</div>
+    <div class="tab" onclick="setTab('agri',this)" data-key="agri">Agriculture</div>
+    <div class="tab" onclick="setTab('marine',this)" data-key="marine">Marine</div>
+    <div class="tab" onclick="setTab('moto',this)" data-key="moto">Moto</div>
+    <div class="tab" onclick="setTab('industriel',this)" data-key="industriel">Industriel</div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="section-head">
+    <div class="section-title" id="t-by-component">Par composant</div>
+  </div>
+  <div class="cat-scroll" id="catScroll">
+    <div class="cat-pill active" onclick="setCat('tous',this)"><div class="cat-icon">🔍</div><div class="cat-name">Tous</div></div>
+    <div class="cat-pill" onclick="setCat('moteur',this)"><div class="cat-icon">⚙️</div><div class="cat-name">Moteur</div></div>
+    <div class="cat-pill" onclick="setCat('transmission',this)"><div class="cat-icon">🔄</div><div class="cat-name">Trans.</div></div>
+    <div class="cat-pill" onclick="setCat('freins',this)"><div class="cat-icon">🛑</div><div class="cat-name">Freins</div></div>
+    <div class="cat-pill" onclick="setCat('suspension',this)"><div class="cat-icon">🌀</div><div class="cat-name">Suspens.</div></div>
+    <div class="cat-pill" onclick="setCat('électricité',this)"><div class="cat-icon">⚡</div><div class="cat-name">Électricité</div></div>
+    <div class="cat-pill" onclick="setCat('carbu',this)"><div class="cat-icon">🔧</div><div class="cat-name">Carbu/Inj.</div></div>
+    <div class="cat-pill" onclick="setCat('turbo',this)"><div class="cat-icon">💨</div><div class="cat-name">Turbo</div></div>
+    <div class="cat-pill" onclick="setCat('pont',this)"><div class="cat-icon">🛞</div><div class="cat-name">Pont/Diff.</div></div>
+    <div class="cat-pill" onclick="setCat('diagnostic',this)"><div class="cat-icon">🖥️</div><div class="cat-name">Diag.</div></div>
+    <div class="cat-pill" onclick="setCat('entretien',this)"><div class="cat-icon">🧰</div><div class="cat-name">Entretien</div></div>
+  </div>
+
+  <div class="section-head" style="margin-top:18px;">
+    <div class="section-title" id="t-by-brand">Par marque</div>
+    <div class="see-all" id="t-see-all">Voir tout →</div>
+  </div>
+  <div class="brand-scroll" id="brandScroll"></div>
+
+  <div class="section-head" style="margin-top:20px;">
+    <div class="section-title" id="t-featured">À la une</div>
+  </div>
+  <div class="featured-banner" onclick="openVideo(1)">
+    <div class="feat-icon">⚙️</div>
+    <div>
+      <div class="feat-label">✅ Vérifié · Moteur</div>
+      <div class="feat-title">Refaire un moteur Cummins ISX complet — guide de survie</div>
+      <div class="feat-meta">👁 24.8k vues · Marc T. · 1h 12min</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-title" id="t-recent">Vidéos récentes</div>
+    <div class="see-all">↕ Trier</div>
+  </div>
+  <div id="videoList"></div>
+</div>
+
+<div class="fab" onclick="openAddModal()" title="Partager une vidéo">＋</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="setNav(this)">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label" id="nl-home">Accueil</div>
+  </div>
+  <div class="nav-item" onclick="setNav(this)">
+    <div class="nav-icon">🔍</div>
+    <div class="nav-label" id="nl-explore">Explorer</div>
+  </div>
+  <div class="nav-item" onclick="setNav(this)">
+    <div class="nav-icon">🔖</div>
+    <div class="nav-label" id="nl-saved">Sauvegardés</div>
+  </div>
+  <div class="nav-item" onclick="setNav(this)">
+    <div class="nav-icon">👤</div>
+    <div class="nav-label" id="nl-profile">Profil</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addModal" onclick="closeIfOverlay(event,'addModal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="m-add-title">Partager une vidéo</div>
+    <div class="modal-sub" id="m-add-sub">Ta contribution aide la communauté 🙌</div>
+    <div class="notice" id="m-notice">⚠️ Toutes les soumissions sont examinées par un mécanicien certifié avant publication.</div>
+    <div class="form-group">
+      <label class="form-label" id="m-yt">Lien YouTube</label>
+      <input class="form-input" id="ytUrl" type="url" placeholder="https://youtube.com/watch?v=...">
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="m-domain">Domaine</label>
+      <select class="form-select" id="domain">
+        <option value="">Choisir...</option>
+        <option value="auto">🚗 Automobile</option>
+        <option value="heavy">🚛 Heavy Duty / Camions</option>
+        <option value="agri">🚜 Agriculture / Machinerie</option>
+        <option value="marine">⛵ Marine / Bateaux</option>
+        <option value="moto">🏍️ Moto / ATV / Quad</option>
+        <option value="industriel">⚙️ Moteurs industriels</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" id="m-make">Marque</label>
+        <select class="form-select" id="make">
+          <option value="">—</option>
+          <optgroup label="🚗 Auto">
+            <option>Toyota</option><option>Honda</option><option>Ford</option>
+            <option>Chevrolet</option><option>Dodge</option><option>RAM</option>
+            <option>Jeep</option><option>VW</option><option>BMW</option>
+            <option>Mercedes</option><option>Nissan</option><option>Hyundai</option>
+            <option>Kia</option><option>Mazda</option><option>Subaru</option><option>GM</option>
+          </optgroup>
+          <optgroup label="🚛 Heavy Duty">
+            <option>Peterbilt</option><option>Kenworth</option><option>Freightliner</option>
+            <option>International</option><option>Mack</option><option>Volvo Trucks</option>
+            <option>Western Star</option>
+          </optgroup>
+          <optgroup label="⚙️ Moteurs">
+            <option>Cummins</option><option>Detroit Diesel</option><option>Caterpillar</option>
+            <option>Perkins</option><option>Kohler</option><option>Briggs & Stratton</option>
+            <option>John Deere</option><option>Isuzu</option>
+          </optgroup>
+          <optgroup label="🔄 Transmissions">
+            <option>Allison</option><option>ZF</option><option>Eaton Fuller</option>
+            <option>Tremec</option><option>Spicer</option>
+          </optgroup>
+          <optgroup label="🔧 Carbu/Injection">
+            <option>Holley</option><option>Edelbrock</option><option>Weber</option>
+            <option>Bosch</option><option>Delphi</option><option>Rochester</option>
+          </optgroup>
+          <optgroup label="💨 Turbo">
+            <option>Garrett</option><option>BorgWarner</option><option>Holset</option><option>Precision</option>
+          </optgroup>
+          <optgroup label="🚜 Agriculture">
+            <option>John Deere</option><option>Case IH</option><option>New Holland</option>
+            <option>Kubota</option><option>Massey Ferguson</option>
+          </optgroup>
+          <optgroup label="🏍️ Moto">
+            <option>Harley-Davidson</option><option>Honda Moto</option><option>Yamaha</option>
+            <option>Kawasaki</option><option>Suzuki</option><option>Can-Am</option>
+          </optgroup>
+          <optgroup label="⛵ Marine">
+            <option>Mercury</option><option>Yamaha Marine</option><option>Volvo Penta</option>
+            <option>Evinrude</option><option>Johnson</option>
+          </optgroup>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="m-model">Modèle / Année</label>
+        <input class="form-input" id="model" type="text" placeholder="ex: ISX 2015">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="m-cat">Composant</label>
+      <select class="form-select" id="catSelect">
+        <option value="">Choisir...</option>
+        <option value="moteur">⚙️ Moteur</option>
+        <option value="transmission">🔄 Transmission / Boîte</option>
+        <option value="freins">🛑 Freins</option>
+        <option value="suspension">🌀 Suspension</option>
+        <option value="électricité">⚡ Électricité / Démarrage</option>
+        <option value="carbu">🔧 Carburateur / Injection</option>
+        <option value="turbo">💨 Turbo / Suralimentation</option>
+        <option value="pont">🛞 Pont / Différentiel</option>
+        <option value="diagnostic">🖥️ Diagnostic / Codes</option>
+        <option value="entretien">🧰 Entretien général</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="m-desc">Description</label>
+      <textarea class="form-textarea" id="desc" placeholder="Décris le problème résolu et pourquoi cette vidéo aide..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" id="m-role">Ton rôle</label>
+      <select class="form-select" id="isMechanic">
+        <option value="diy">🔨 Bricoleur / DIY</option>
+        <option value="amateur">🛠️ Amateur expérimenté</option>
+        <option value="pro">👷 Mécanicien professionnel</option>
+        <option value="certified">🎓 Mécanicien certifié (ASE/Red Seal)</option>
+      </select>
+    </div>
+    <button class="submit-btn" onclick="submitVideo()" id="m-submit">Soumettre pour validation →</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="videoModal" onclick="closeIfOverlay(event,'videoModal')">
+  <div class="modal" id="videoModalContent"></div>
+</div>
+
+<div class="modal-overlay" id="langModal" onclick="closeIfOverlay(event,'langModal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🌐 Langue / Language</div>
+    <div class="modal-sub">Choisissez votre langue</div>
+    <div class="lang-grid">
+      <div class="lang-option active" onclick="setLang('fr',this)">
+        <div class="lang-flag">🇫🇷</div>
+        <div class="lang-info"><div class="lang-name">Français</div><div class="lang-native">French</div></div>
+      </div>
+      <div class="lang-option" onclick="setLang('en',this)">
+        <div class="lang-flag">🇺🇸</div>
+        <div class="lang-info"><div class="lang-name">English</div><div class="lang-native">Anglais</div></div>
+      </div>
+      <div class="lang-option" onclick="setLang('es',this)">
+        <div class="lang-flag">🇪🇸</div>
+        <div class="lang-info"><div class="lang-name">Español</div><div class="lang-native">Espagnol</div></div>
+      </div>
+      <div class="lang-option" onclick="setLang('pt',this)">
+        <div class="lang-flag">🇧🇷</div>
+        <div class="lang-info"><div class="lang-name">Português</div><div class="lang-native">Portugais</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const videos = [
+  { id:1, domain:'heavy', make:'Cummins', model:'ISX 2013-2019', title:'Refaire un moteur Cummins ISX complet — guide de survie', desc:'De la dépose du moteur à la remise en route. Joint de culasse, chemises, coussinets, réglage des soupapes. Tout y est.', category:'moteur', author:'Marc T.', initials:'MT', color:'#f97316', verified:true, views:'24.8k', likes:1840, duration:'1:12:44', icon:'⚙️', tags:['ISX','culasse','heavy duty','coussinets'] },
+  { id:2, domain:'auto', make:'Honda', model:'Civic 2016-2021', title:'Batterie ou alternateur ? Diagnostic complet au multimètre', desc:'Méthode infaillible pour distinguer une batterie morte d\'un alternateur HS. Aucun scanner requis.', category:'électricité', author:'Steve B.', initials:'SB', color:'#0099ff', verified:true, views:'8.2k', likes:521, duration:'18:45', icon:'⚡', tags:['batterie','alternateur','diagnostic','multimètre'] },
+  { id:3, domain:'heavy', make:'Allison', model:'3000/4000 Series', title:'Vidange et calibration transmission Allison 4000', desc:'Procédure pas à pas pour la vidange de l\'ATF, remplacement du filtre et calibration via TES-295.', category:'transmission', author:'Jean-F. L.', initials:'JL', color:'#8b5cf6', verified:true, views:'11.3k', likes:734, duration:'34:20', icon:'🔄', tags:['Allison','transmission','ATF','calibration'] },
+  { id:4, domain:'auto', make:'Ford', model:'F-150 2015-2020', title:'Freins avant complets — plaquettes, disques, étriers', desc:'Remplacement complet des freins avant. Purge du circuit hydraulique incluse. Outils nécessaires listés.', category:'freins', author:'Pierre G.', initials:'PG', color:'#22c55e', verified:false, views:'3.1k', likes:198, duration:'28:33', icon:'🛑', tags:['freins','plaquettes','disques','purge'] },
+  { id:5, domain:'agri', make:'John Deere', model:'6M Series', title:'Diagnostic code erreur moteur — tracteur 6130M', desc:'Lecture des codes DTC avec le service advisor. Problème injection résolu sans passage chez le concessionnaire.', category:'diagnostic', author:'Farmer Pro', initials:'FP', color:'#eab308', verified:true, views:'6.7k', likes:412, duration:'22:15', icon:'🚜', tags:['John Deere','DTC','injection','tracteur'] },
+  { id:6, domain:'marine', make:'Mercury', model:'Verado 350 2018+', title:'Révision hors-bord Mercury Verado 350 — entretien 100h', desc:'Vidange, filtres, zincs, inspection des impellers. Tout ce qu\'il faut faire à 100 heures de navigation.', category:'entretien', author:'Capitaine R.', initials:'CR', color:'#06b6d4', verified:true, views:'4.9k', likes:287, duration:'41:08', icon:'⛵', tags:['Mercury','hors-bord','entretien','impeller'] },
+  { id:7, domain:'auto', make:'Holley', model:'4150 Double-Pumper', title:'Rebuild carburateur Holley 4150 — démontage complet', desc:'Nettoyage, remplacement des joints, réglage du flotteur et des gicleurs. Parfait pour une remise à neuf.', category:'carbu', author:'Alex V.', initials:'AV', color:'#ef4444', verified:true, views:'9.8k', likes:634, duration:'55:10', icon:'🔧', tags:['Holley','carburateur','rebuild','gicleurs'] },
+  { id:8, domain:'moto', make:'Harley-Davidson', model:'Twin Cam 103', title:'Bruit moteur Twin Cam — poussoir ou chaîne de distribution ?', desc:'Identifier la source d\'un bruit caractéristique. Test comparatif avec stéthoscope mécanique.', category:'moteur', author:'Moto Doc', initials:'MD', color:'#f97316', verified:false, views:'5.4k', likes:321, duration:'19:50', icon:'🏍️', tags:['Harley','Twin Cam','poussoir','distribution'] },
+  { id:9, domain:'industriel', make:'Caterpillar', model:'3406E / C15', title:'Remplacement injecteurs CAT C15 — torque et procédure', desc:'Dépose et repose des injecteurs mécaniques. Couples de serrage, nettoyage des sièges et test de retour.', category:'moteur', author:'Cat Tech', initials:'CT', color:'#f59e0b', verified:true, views:'15.2k', likes:1120, duration:'47:30', icon:'⚙️', tags:['Caterpillar','C15','injecteurs','torque'] },
+  { id:10, domain:'heavy', make:'Garrett', model:'GT42 / GTX42', title:'Rebuild turbo Garrett GT42 — roulements et joints', desc:'Démontage complet, inspection du carter, remplacement des roulements et joints dynamiques. Équilibrage manuel.', category:'turbo', author:'Turbo Mike', initials:'TM', color:'#a855f7', verified:true, views:'7.6k', likes:498, duration:'38:55', icon:'💨', tags:['Garrett','turbo','roulements','rebuild'] },
+];
+
+const allBrands = {
+  tous: [
+    { name:'Toyota', letters:'TOY', bg:'#e63946', fg:'#fff' },
+    { name:'Ford', letters:'FORD', bg:'#003087', fg:'#fff' },
+    { name:'Cummins', letters:'CUM', bg:'#1a3a5c', fg:'#fff' },
+    { name:'Allison', letters:'ALL', bg:'#2d6a4f', fg:'#fff' },
+    { name:'Holley', letters:'HOL', bg:'#c1121f', fg:'#fff' },
+    { name:'Garrett', letters:'GAR', bg:'#7209b7', fg:'#fff' },
+    { name:'CAT', letters:'CAT', bg:'#f59e0b', fg:'#000' },
+    { name:'J. Deere', letters:'JD', bg:'#2d6a4f', fg:'#f59e0b' },
+    { name:'Mercury', letters:'MRC', bg:'#0077b6', fg:'#fff' },
+    { name:'Harley', letters:'H-D', bg:'#f97316', fg:'#fff' },
+    { name:'Honda', letters:'HON', bg:'#cc0000', fg:'#fff' },
+    { name:'ZF', letters:'ZF', bg:'#333', fg:'#fff' },
+  ],
+  auto: [
+    { name:'Toyota', letters:'TOY', bg:'#e63946', fg:'#fff' },
+    { name:'Ford', letters:'FORD', bg:'#003087', fg:'#fff' },
+    { name:'Honda', letters:'HON', bg:'#cc0000', fg:'#fff' },
+    { name:'Chevrolet', letters:'CHV', bg:'#d4a017', fg:'#fff' },
+    { name:'Dodge', letters:'DDG', bg:'#cc0000', fg:'#fff' },
+    { name:'BMW', letters:'BMW', bg:'#1c69d4', fg:'#fff' },
+    { name:'VW', letters:'VW', bg:'#001e50', fg:'#fff' },
+    { name:'Nissan', letters:'NIS', bg:'#c3002f', fg:'#fff' },
+  ],
+  heavy: [
+    { name:'Peterbilt', letters:'PBT', bg:'#1a1a2e', fg:'#e63946' },
+    { name:'Kenworth', letters:'KW', bg:'#003366', fg:'#fff' },
+    { name:'Freightliner', letters:'FRT', bg:'#cc0000', fg:'#fff' },
+    { name:'Mack', letters:'MAC', bg:'#333', fg:'#f59e0b' },
+    { name:'Cummins', letters:'CUM', bg:'#1a3a5c', fg:'#fff' },
+    { name:'Detroit', letters:'DET', bg:'#e63946', fg:'#fff' },
+    { name:'Allison', letters:'ALL', bg:'#2d6a4f', fg:'#fff' },
+    { name:'Eaton', letters:'EAT', bg:'#003087', fg:'#fff' },
+  ],
+  agri: [
+    { name:'J. Deere', letters:'JD', bg:'#2d6a4f', fg:'#f59e0b' },
+    { name:'Case IH', letters:'CASE', bg:'#cc0000', fg:'#fff' },
+    { name:'N. Holland', letters:'NH', bg:'#003087', fg:'#fff' },
+    { name:'Kubota', letters:'KUB', bg:'#e63946', fg:'#fff' },
+    { name:'Massey', letters:'MF', bg:'#cc0000', fg:'#fff' },
+    { name:'Perkins', letters:'PRK', bg:'#333', fg:'#fff' },
+  ],
+  marine: [
+    { name:'Mercury', letters:'MRC', bg:'#0077b6', fg:'#fff' },
+    { name:'Yamaha', letters:'YAM', bg:'#003087', fg:'#fff' },
+    { name:'V. Penta', letters:'VP', bg:'#003366', fg:'#fff' },
+    { name:'Evinrude', letters:'EVI', bg:'#cc0000', fg:'#fff' },
+  ],
+  moto: [
+    { name:'Harley', letters:'H-D', bg:'#f97316', fg:'#fff' },
+    { name:'Honda', letters:'HON', bg:'#cc0000', fg:'#fff' },
+    { name:'Yamaha', letters:'YAM', bg:'#003087', fg:'#fff' },
+    { name:'Kawasaki', letters:'KAW', bg:'#2d6a4f', fg:'#fff' },
+    { name:'Can-Am', letters:'CA', bg:'#f59e0b', fg:'#000' },
+  ],
+  industriel: [
+    { name:'CAT', letters:'CAT', bg:'#f59e0b', fg:'#000' },
+    { name:'Cummins', letters:'CUM', bg:'#1a3a5c', fg:'#fff' },
+    { name:'Kohler', letters:'KOH', bg:'#cc0000', fg:'#fff' },
+    { name:'Briggs', letters:'B&S', bg:'#e63946', fg:'#fff' },
+    { name:'Garrett', letters:'GAR', bg:'#7209b7', fg:'#fff' },
+    { name:'Holset', letters:'HLS', bg:'#2d6a4f', fg:'#fff' },
+  ],
+};
+
+const i18n = {
+  fr: {
+    search: 'Marque, modèle, composant, problème...',
+    byComponent: 'Par composant', byBrand: 'Par marque', seeAll: 'Voir tout →',
+    featured: 'À la une', recent: 'Vidéos récentes',
+    home: 'Accueil', explore: 'Explorer', saved: 'Sauvegardés', profile: 'Profil',
+    addTitle: 'Partager une vidéo', addSub: 'Ta contribution aide la communauté 🙌',
+    notice: '⚠️ Toutes les soumissions sont examinées par un mécanicien certifié avant publication.',
+    yt: 'Lien YouTube', domain: 'Domaine', make: 'Marque', model: 'Modèle / Année',
+    cat: 'Composant', desc: 'Description', role: 'Ton rôle',
+    submit: 'Soumettre pour validation →',
+    toast_ok: '✅ Soumis ! En attente de validation',
+    toast_err: '⚠️ Remplis tous les champs requis',
+    openYt: '▶ Ouvrir sur YouTube',
+    verified_label: '✓ VÉRIFIÉ', pending_label: '⏳ EN ATTENTE',
+    tabs: { tous:'Tous', auto:'Auto', heavy:'Heavy Duty', agri:'Agriculture', marine:'Marine', moto:'Moto', industriel:'Industriel' }
+  },
+  en: {
+    search: 'Brand, model, component, issue...',
+    byComponent: 'By component', byBrand: 'By brand', seeAll: 'See all →',
+    featured: 'Featured', recent: 'Recent videos',
+    home: 'Home', explore: 'Explore', saved: 'Saved', profile: 'Profile',
+    addTitle: 'Share a video', addSub: 'Your contribution helps the community 🙌',
+    notice: '⚠️ All submissions are reviewed by a certified mechanic before publishing.',
+    yt: 'YouTube link', domain: 'Domain', make: 'Brand', model: 'Model / Year',
+    cat: 'Component', desc: 'Description', role: 'Your role',
+    submit: 'Submit for review →',
+    toast_ok: '✅ Submitted! Awaiting review',
+    toast_err: '⚠️ Please fill all required fields',
+    openYt: '▶ Open on YouTube',
+    verified_label: '✓ VERIFIED', pending_label: '⏳ PENDING',
+    tabs: { tous:'All', auto:'Auto', heavy:'Heavy Duty', agri:'Agriculture', marine:'Marine', moto:'Moto', industriel:'Industrial' }
+  },
+  es: {
+    search: 'Marca, modelo, componente, problema...',
+    byComponent: 'Por componente', byBrand: 'Por marca', seeAll: 'Ver todo →',
+    featured: 'Destacado', recent: 'Vídeos recientes',
+    home: 'Inicio', explore: 'Explorar', saved: 'Guardados', profile: 'Perfil',
+    addTitle: 'Compartir un video', addSub: 'Tu aporte ayuda a la comunidad 🙌',
+    notice: '⚠️ Todas las solicitudes son revisadas por un mecánico certificado.',
+    yt: 'Enlace YouTube', domain: 'Dominio', make: 'Marca', model: 'Modelo / Año',
+    cat: 'Componente', desc: 'Descripción', role: 'Tu rol',
+    submit: 'Enviar para revisión →',
+    toast_ok: '✅ Enviado! En espera de revisión',
+    toast_err: '⚠️ Rellena todos los campos requeridos',
+    openYt: '▶ Abrir en YouTube',
+    verified_label: '✓ VERIFICADO', pending_label: '⏳ PENDIENTE',
+    tabs: { tous:'Todos', auto:'Auto', heavy:'Heavy Duty', agri:'Agricultura', marine:'Marina', moto:'Moto', industriel:'Industrial' }
+  },
+  pt: {
+    search: 'Marca, modelo, componente, problema...',
+    byComponent: 'Por componente', byBrand: 'Por marca', seeAll: 'Ver tudo →',
+    featured: 'Destaque', recent: 'Vídeos recentes',
+    home: 'Início', explore: 'Explorar', saved: 'Salvos', profile: 'Perfil',
+    addTitle: 'Compartilhar um vídeo', addSub: 'Sua contribuição ajuda a comunidade 🙌',
+    notice: '⚠️ Todas as submissões são revisadas por um mecânico certificado.',
+    yt: 'Link YouTube', domain: 'Domínio', make: 'Marca', model: 'Modelo / Ano',
+    cat: 'Componente', desc: 'Descrição', role: 'Seu papel',
+    submit: 'Enviar para revisão →',
+    toast_ok: '✅ Enviado! Aguardando revisão',
+    toast_err: '⚠️ Preencha todos os campos obrigatórios',
+    openYt: '▶ Abrir no YouTube',
+    verified_label: '✓ VERIFICADO', pending_label: '⏳ PENDENTE',
+    tabs: { tous:'Todos', auto:'Auto', heavy:'Heavy Duty', agri:'Agricultura', marine:'Marina', moto:'Moto', industriel:'Industrial' }
+  }
+};
+
+let lang = 'fr';
+let activeTab = 'tous';
+let activeCat = 'tous';
+
+function applyLang() {
+  const t = i18n[lang];
+  document.getElementById('searchInput').placeholder = t.search;
+  document.getElementById('t-by-component').textContent = t.byComponent;
+  document.getElementById('t-by-brand').textContent = t.byBrand;
+  document.getElementById('t-see-all').textContent = t.seeAll;
+  document.getElementById('t-featured').textContent = t.featured;
+  document.getElementById('t-recent').textContent = t.recent;
+  document.getElementById('nl-home').textContent = t.home;
+  document.getElementById('nl-explore').textContent = t.explore;
+  document.getElementById('nl-saved').textContent = t.saved;
+  document.getElementById('nl-profile').textContent = t.profile;
+  document.getElementById('m-add-title').textContent = t.addTitle;
+  document.getElementById('m-add-sub').textContent = t.addSub;
+  document.getElementById('m-notice').textContent = t.notice;
+  document.getElementById('m-yt').textContent = t.yt;
+  document.getElementById('m-domain').textContent = t.domain;
+  document.getElementById('m-make').textContent = t.make;
+  document.getElementById('m-model').textContent = t.model;
+  document.getElementById('m-cat').textContent = t.cat;
+  document.getElementById('m-desc').textContent = t.desc;
+  document.getElementById('m-role').textContent = t.role;
+  document.getElementById('m-submit').textContent = t.submit;
+  document.querySelector('.lang-btn').innerHTML = '🌐 ' + lang.toUpperCase();
+  document.querySelectorAll('.tab').forEach(tab => {
+    const key = tab.dataset.key;
+    if (key && t.tabs[key]) tab.textContent = t.tabs[key];
+  });
+}
+
+function setLang(l, el) {
+  lang = l;
+  document.querySelectorAll('.lang-option').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  applyLang();
+  applyFilters();
+  document.getElementById('langModal').classList.remove('open');
+  showToast('🌐 ' + l.toUpperCase());
+}
+
+function openLang() { document.getElementById('langModal').classList.add('open'); }
+
+function renderBrands() {
+  const brands = allBrands[activeTab] || allBrands.tous;
+  document.getElementById('brandScroll').innerHTML = brands.map(b => `
+    <div class="brand-chip" onclick="searchBrand('${b.name}')">
+      <div class="brand-logo" style="background:${b.bg};color:${b.fg}">${b.letters}</div>
+      <div class="brand-name">${b.name}</div>
+    </div>
+  `).join('');
+}
+
+function searchBrand(name) {
+  document.getElementById('searchInput').value = name;
+  applyFilters();
+}
+
+function setTab(tab, el) {
+  activeTab = tab;
+  activeCat = 'tous';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.cat-pill').forEach((p,i) => p.classList.toggle('active', i===0));
+  renderBrands();
+  applyFilters();
+}
+
+function setCat(cat, el) {
+  activeCat = cat;
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const term = document.getElementById('searchInput').value.toLowerCase();
+  let list = videos;
+  if (activeTab !== 'tous') list = list.filter(v => v.domain === activeTab);
+  if (activeCat !== 'tous') list = list.filter(v => v.category === activeCat);
+  if (term) list = list.filter(v =>
+    v.make.toLowerCase().includes(term) ||
+    v.model.toLowerCase().includes(term) ||
+    v.title.toLowerCase().includes(term) ||
+    v.category.toLowerCase().includes(term) ||
+    (v.tags||[]).some(t => t.toLowerCase().includes(term))
+  );
+  renderVideos(list);
+}
+
+function renderVideos(list) {
+  const container = document.getElementById('videoList');
+  if (!list.length) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">🔩</div><div class="empty-text">Aucune vidéo trouvée</div><div class="empty-sub">Essaie d\'autres mots-clés</div></div>';
+    return;
+  }
+  container.innerHTML = list.map(v => `
+    <div class="video-card" onclick="openVideo(${v.id})">
+      <div class="vthumb">
+        <div class="vthumb-bg">${v.icon}</div>
+        <div class="vthumb-overlay"><div class="play-btn">▶</div></div>
+        <div class="vduration">${v.duration}</div>
+        <div class="vbadge ${v.verified?'verified':'pending'}">
+          ${v.verified ? i18n[lang].verified_label : i18n[lang].pending_label}
+        </div>
+        <div class="vcorner">${v.domain}</div>
+      </div>
+      <div class="vinfo">
+        <div class="vmake">
+          <div style="width:18px;height:18px;border-radius:5px;background:${v.color};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;">${v.make.slice(0,3).toUpperCase()}</div>
+          ${v.make} · ${v.model}
+        </div>
+        <div class="vtitle">${v.title}</div>
+        <div class="vmeta">
+          <div class="vauthor">
+            <div class="avatar" style="background:${v.color}">${v.initials}</div>
+            ${v.author}
+          </div>
+          <div class="vstats">
+            <span>👁 ${v.views}</span>
+            <span>👍 ${v.likes}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openVideo(id) {
+  const v = videos.find(x => x.id === id);
+  if (!v) return;
+  const t = i18n[lang];
+  document.getElementById('videoModalContent').innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="detail-thumb" style="font-size:70px">${v.icon}
+      <div class="detail-play-overlay">
+        <button class="yt-open-btn" onclick="window.open('${v.ytUrl||'https://youtube.com'}','_blank')">
+          ▶ ${t.openYt}
+        </button>
+        <div style="font-size:11px;color:#888;">${v.duration}</div>
+      </div>
+    </div>
+    <div class="detail-category-tag">${v.icon} ${v.category.toUpperCase()} · ${v.domain.toUpperCase()}</div>
+    <div class="detail-title">${v.title}</div>
+    <div class="detail-make">${v.make} · ${v.model}</div>
+    <div class="tags">${(v.tags||[]).map(tag=>'<span class="tag">#'+tag+'</span>').join('')}</div>
+    <div class="detail-desc">${v.desc}</div>
+    <div class="divider"></div>
+    <div class="detail-author-row">
+      <div class="detail-author">
+        <div class="detail-avatar" style="background:${v.color}">${v.initials}</div>
+        <div>
+          <div class="detail-author-name">${v.author}</div>
+          <div class="detail-author-sub">${v.verified ? '✅ '+t.verified_label : '⏳ '+t.pending_label}</div>
+        </div>
+      </div>
+      <div class="detail-stats">
+        <span>👁 ${v.views}</span>
+        <span>👍 ${v.likes}</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('videoModal').classList.add('open');
+}
+
+function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+
+function submitVideo() {
+  const url = document.getElementById('ytUrl').value;
+  const make = document.getElementById('make').value;
+  const model = document.getElementById('model').value;
+  const cat = document.getElementById('catSelect').value;
+  if (!url || !make || !model || !cat) {
+    showToast(i18n[lang].toast_err); return;
+  }
+  document.getElementById('addModal').classList.remove('open');
+  showToast(i18n[lang].toast_ok);
+  ['ytUrl','model','desc'].forEach(id => document.getElementById(id).value = '');
+  ['make','catSelect','domain','isMechanic'].forEach(id => document.getElementById(id).selectedIndex = 0);
+}
+
+function closeIfOverlay(e, id) {
+  if (e.target === e.currentTarget) document.getElementById(id).classList.remove('open');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function setNav(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+renderBrands();
+applyFilters();
+applyLang();
+</script>
+
+</body>
+</html>
